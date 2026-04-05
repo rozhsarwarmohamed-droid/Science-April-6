@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>The Magic Three Magnetic Materials – Grade 3 Science</title>
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @import url('data:text/css,');
+
+  :root {
+    --navy:    #0b0f2e;
+    --deep:    #060918;
+    --gold:    #f5c842;
+    --gold2:   #ffdd6b;
+    --cyan:    #00e5ff;
+    --green:   #18e87a;
+    --red:     #ff3f5e;
+    --purple:  #9b5de5;
+    --white:   #ffffff;
+    --card-bg: rgba(255,255,255,0.07);
+    --radius:  22px;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--deep);
+    font-family: 'Trebuchet MS', 'Segoe UI', Arial, sans-serif;
+    color: var(--white);
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: pan-y;
+  }
+
+  /* ===== STARFIELD BG ===== */
+  #stars {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(0,229,255,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 70%, rgba(155,93,229,0.08) 0%, transparent 60%),
+      var(--deep);
+    z-index: 0;
+  }
+  #stars::before {
+    content:'';
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 10% 15%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 30% 40%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(2px 2px at 55% 10%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 75% 60%, rgba(255,255,255,0.35), transparent),
+      radial-gradient(1.5px 1.5px at 90% 25%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 20% 80%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(2px 2px at 65% 85%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 45% 55%, rgba(255,255,255,0.25), transparent),
+      radial-gradient(1.5px 1.5px at 85% 45%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 5% 50%, rgba(255,255,255,0.3), transparent);
+  }
+
+  /* ===== WRAPPER ===== */
+  #app {
+    position: relative; z-index: 1;
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+  }
+
+  /* ===== TOP BAR ===== */
+  #topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 32px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1.5px solid rgba(255,255,255,0.08);
+    flex-shrink: 0;
+  }
+  #topbar .logo {
+    font-size: 32px; font-weight: 900; letter-spacing: -0.5px;
+    color: var(--gold);
+    text-shadow: 0 0 18px rgba(245,200,66,0.6);
+  }
+  #topbar .subtitle {
+    font-size: 20px; color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+  #timer-wrap {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(0,229,255,0.1); border: 1.5px solid rgba(0,229,255,0.3);
+    border-radius: 40px; padding: 10px 22px;
+  }
+  #timer-wrap .timer-icon { font-size: 26px; }
+  #timer { font-size: 28px; font-weight: 800; color: var(--cyan); letter-spacing: 1px; }
+
+  /* ===== PROGRESS BAR ===== */
+  #progress-wrap {
+    padding: 0 28px 0;
+    display: flex; align-items: center; gap: 12px;
+    flex-shrink: 0; padding-top: 8px; padding-bottom: 6px;
+  }
+  .prog-step {
+    flex: 1; height: 12px; border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    transition: background 0.5s;
+    cursor: pointer;
+    touch-action: manipulation;
+    min-height: 32px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .prog-step.done { background: var(--gold); box-shadow: 0 0 10px rgba(245,200,66,0.5); }
+  .prog-step.active { background: var(--cyan); box-shadow: 0 0 10px rgba(0,229,255,0.5); animation: pulse-prog 1.2s infinite; }
+  @keyframes pulse-prog { 0%,100%{opacity:1} 50%{opacity:0.6} }
+  .prog-label { font-size: 15px; color: rgba(255,255,255,0.45); min-width: 54px; text-align: right; }
+
+  /* ===== SECTION CONTAINER ===== */
+  #section-wrap {
+    flex: 1; overflow: hidden; position: relative;
+  }
+  .section {
+    position: absolute; inset: 0;
+    padding: 14px 32px 18px;
+    display: none; flex-direction: column; align-items: center;
+    opacity: 0; transition: opacity 0.4s;
+    overflow-y: auto;
+  }
+  .section.active {
+    display: flex; opacity: 1;
+  }
+  .section-title {
+    font-size: 44px; font-weight: 900; text-align: center;
+    letter-spacing: -0.5px; line-height: 1.1;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  }
+  .section-sub {
+    font-size: 26px; color: rgba(255,255,255,0.65);
+    text-align: center; margin-bottom: 18px; font-weight: 500;
+  }
+
+  /* ===== NAV BUTTONS ===== */
+  #nav {
+    display: flex; justify-content: center; gap: 24px;
+    padding: 12px 28px 14px;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.03);
+    border-top: 1.5px solid rgba(255,255,255,0.07);
+  }
+  .nav-btn {
+    font-size: 28px; font-weight: 800;
+    padding: 18px 56px; border-radius: 50px;
+    border: none; cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+    letter-spacing: 0.5px;
+    touch-action: manipulation;
+    min-height: 72px;
+  }
+  .nav-btn:active { transform: scale(0.95); }
+  #btn-prev {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.7);
+    border: 2px solid rgba(255,255,255,0.15);
+  }
+  #btn-next {
+    background: linear-gradient(135deg, var(--gold), #e6a800);
+    color: var(--navy);
+    box-shadow: 0 4px 24px rgba(245,200,66,0.4);
+  }
+  #btn-next:hover { box-shadow: 0 6px 32px rgba(245,200,66,0.6); transform: scale(1.03); }
+  #btn-prev:disabled { opacity: 0.25; cursor: not-allowed; }
+
+  /* ==============================
+     SECTION 1 – THE MAGIC THREE
+  ============================== */
+  #sec1 .cards-row {
+    display: flex; gap: 26px; width: 100%;
+    justify-content: center; flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .mag-card {
+    flex: 1; min-width: 200px; max-width: 320px;
+    background: var(--card-bg);
+    border: 2.5px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius);
+    padding: 32px 22px 26px;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mag-card::before {
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.08), transparent 65%);
+  }
+  .mag-card:active { transform: scale(0.97); }
+  .mag-card.glow-iron {
+    border-color: #ff8c42;
+    box-shadow: 0 0 40px rgba(255,140,66,0.55), inset 0 0 30px rgba(255,140,66,0.12);
+    animation: glow-pulse-iron 1.2s ease-out;
+  }
+  .mag-card.glow-nickel {
+    border-color: #64dfdf;
+    box-shadow: 0 0 40px rgba(100,223,223,0.55), inset 0 0 30px rgba(100,223,223,0.12);
+    animation: glow-pulse-nickel 1.2s ease-out;
+  }
+  .mag-card.glow-cobalt {
+    border-color: var(--purple);
+    box-shadow: 0 0 40px rgba(155,93,229,0.55), inset 0 0 30px rgba(155,93,229,0.12);
+    animation: glow-pulse-cobalt 1.2s ease-out;
+  }
+  @keyframes glow-pulse-iron   { 0%{box-shadow:none} 50%{box-shadow:0 0 60px rgba(255,140,66,0.8)} 100%{box-shadow:0 0 40px rgba(255,140,66,0.55)} }
+  @keyframes glow-pulse-nickel { 0%{box-shadow:none} 50%{box-shadow:0 0 60px rgba(100,223,223,0.8)} 100%{box-shadow:0 0 40px rgba(100,223,223,0.55)} }
+  @keyframes glow-pulse-cobalt { 0%{box-shadow:none} 50%{box-shadow:0 0 60px rgba(155,93,229,0.8)} 100%{box-shadow:0 0 40px rgba(155,93,229,0.55)} }
+
+  .mag-card .card-emoji { font-size: 84px; line-height: 1; }
+  .mag-card .card-name {
+    font-size: 38px; font-weight: 900; letter-spacing: -0.5px;
+    text-align: center;
+  }
+  .card-name.iron   { color: #ff8c42; }
+  .card-name.nickel { color: #64dfdf; }
+  .card-name.cobalt { color: #c9aaff; }
+  .mag-card .card-symbol {
+    font-size: 24px; font-weight: 700;
+    background: rgba(255,255,255,0.1); border-radius: 8px;
+    padding: 4px 16px;
+    color: rgba(255,255,255,0.75);
+  }
+  .mag-card .card-tag {
+    font-size: 22px; font-weight: 700;
+    color: var(--gold); text-align: center; margin-top: 4px;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity 0.35s, transform 0.35s;
+  }
+  .mag-card.tapped .card-tag { opacity: 1; transform: translateY(0); }
+
+  .mag-card .tap-hint {
+    font-size: 19px; color: rgba(255,255,255,0.35); margin-top: 4px;
+  }
+
+  .fact-box {
+    background: rgba(245,200,66,0.1);
+    border: 2px solid rgba(245,200,66,0.3);
+    border-radius: var(--radius);
+    padding: 18px 30px;
+    font-size: 26px; font-weight: 700; text-align: center;
+    color: var(--gold2); line-height: 1.4;
+    width: 100%; max-width: 820px;
+    margin-top: 12px;
+  }
+
+  /* ==============================
+     SECTION 2 – SECRET INGREDIENT LAB
+  ============================== */
+  #sec2 .recipes-row {
+    display: flex; gap: 22px; justify-content: center; flex-wrap: wrap;
+    width: 100%;
+  }
+  .recipe-card {
+    flex: 1; min-width: 210px; max-width: 300px;
+    background: var(--card-bg);
+    border: 2.5px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius);
+    padding: 28px 20px 24px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: relative;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .recipe-card:active { transform: scale(0.96); }
+  .recipe-label {
+    font-size: 28px; font-weight: 900; letter-spacing: -0.5px;
+    color: var(--gold2);
+  }
+  .recipe-name { font-size: 22px; font-weight: 700; color: rgba(255,255,255,0.8); }
+  .recipe-formula {
+    font-size: 19px; line-height: 1.5; text-align: center;
+    color: rgba(255,255,255,0.6); font-weight: 500;
+  }
+  .recipe-formula span { color: var(--cyan); font-weight: 800; }
+  .recipe-result {
+    margin-top: 6px; font-size: 28px; font-weight: 900;
+    border-radius: 12px; padding: 8px 18px;
+    opacity: 0; transform: scale(0.6);
+    transition: opacity 0.35s, transform 0.35s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .recipe-result.show { opacity: 1; transform: scale(1); }
+  .recipe-result.magnetic { background: rgba(24,232,122,0.18); color: var(--green); border: 2px solid var(--green); }
+  .recipe-result.non-magnetic { background: rgba(255,63,94,0.15); color: var(--red); border: 2px solid var(--red); }
+
+  .tap-all-hint {
+    font-size: 26px; color: rgba(255,255,255,0.45); text-align: center;
+    margin-bottom: 10px; font-weight: 600;
+  }
+
+  .ingredient-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.09);
+    border-radius: 6px; padding: 1px 8px;
+    font-size: 17px; margin: 1px;
+    font-weight: 700;
+  }
+  .ingredient-tag.magic { color: var(--gold2); background: rgba(245,200,66,0.15); }
+
+  /* ==============================
+     SECTION 3 – SORTING CHALLENGE
+  ============================== */
+  #sec3 .drag-area {
+    width: 100%; display: flex; flex-direction: column; gap: 10px;
+  }
+  #sec3 .items-tray {
+    display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+    padding: 12px 10px;
+    background: rgba(255,255,255,0.04);
+    border: 2px dashed rgba(255,255,255,0.15);
+    border-radius: var(--radius);
+    min-height: 110px;
+    align-items: center;
+  }
+  .drag-item {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 16px;
+    padding: 14px 22px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    cursor: grab;
+    touch-action: none;
+    font-size: 44px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-width: 110px;
+    min-height: 100px;
+    position: relative;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .drag-item .di-label {
+    font-size: 17px; font-weight: 700;
+    color: rgba(255,255,255,0.8); text-align: center; white-space: nowrap;
+  }
+  .drag-item.dragging { opacity: 0.5; transform: scale(1.08); cursor: grabbing; }
+  .drag-item.bounce {
+    animation: bounce-back 0.5s ease;
+  }
+  @keyframes bounce-back {
+    0%{transform:translateX(0)} 20%{transform:translateX(-18px)} 50%{transform:translateX(12px)} 80%{transform:translateX(-6px)} 100%{transform:translateX(0)}
+  }
+  .drag-item.correct-placed {
+    cursor: default; pointer-events: none;
+    border-color: var(--green); box-shadow: 0 0 14px rgba(24,232,122,0.4);
+    background: rgba(24,232,122,0.12);
+  }
+
+  .bins-row {
+    display: flex; gap: 16px; width: 100%;
+  }
+  .drop-bin {
+    flex: 1; min-height: 180px;
+    border-radius: var(--radius); padding: 16px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+  .drop-bin.mag-bin {
+    background: rgba(24,232,122,0.07);
+    border: 3px dashed rgba(24,232,122,0.35);
+  }
+  .drop-bin.non-bin {
+    background: rgba(255,63,94,0.07);
+    border: 3px dashed rgba(255,63,94,0.35);
+  }
+  .drop-bin.drag-over.mag-bin  { background: rgba(24,232,122,0.16); border-color: var(--green); }
+  .drop-bin.drag-over.non-bin  { background: rgba(255,63,94,0.14); border-color: var(--red); }
+  .bin-title {
+    font-size: 30px; font-weight: 900; letter-spacing: -0.5px;
+  }
+  .mag-bin  .bin-title { color: var(--green); }
+  .non-bin  .bin-title { color: var(--red); }
+  .bin-icon { font-size: 44px; }
+  .bin-items {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  }
+  .bin-items .drag-item { font-size: 28px; padding: 8px 12px; min-width: 80px; }
+  .bin-items .drag-item .di-label { font-size: 13px; }
+
+  #sec3 .score-bar {
+    font-size: 26px; font-weight: 700; text-align: center;
+    color: var(--gold2);
+  }
+
+  /* ==============================
+     SECTION 4 – WHY QUIZ
+  ============================== */
+  .quiz-q {
+    font-size: 32px; font-weight: 800; text-align: center;
+    line-height: 1.3; margin-bottom: 18px; max-width: 820px;
+    color: var(--gold2);
+  }
+  .quiz-options {
+    display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 700px;
+  }
+  .quiz-opt {
+    font-size: 32px; font-weight: 800;
+    padding: 26px 38px; border-radius: var(--radius);
+    border: 3px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.07);
+    cursor: pointer; text-align: left;
+    display: flex; align-items: center; gap: 16px;
+    transition: transform 0.15s, border-color 0.2s, background 0.2s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 90px;
+  }
+  .quiz-opt:active { transform: scale(0.97); }
+  .quiz-opt .opt-letter {
+    font-size: 26px; font-weight: 900;
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px; padding: 4px 14px;
+    min-width: 56px; text-align: center;
+  }
+  .quiz-opt.correct {
+    border-color: var(--green); background: rgba(24,232,122,0.14);
+    pointer-events: none;
+  }
+  .quiz-opt.wrong {
+    border-color: var(--red); background: rgba(255,63,94,0.12);
+    pointer-events: none; opacity: 0.55;
+  }
+
+  #quiz-feedback {
+    margin-top: 18px; text-align: center;
+    opacity: 0; transform: scale(0.5);
+    transition: opacity 0.4s, transform 0.4s;
+    font-size: 36px; font-weight: 900;
+  }
+  #quiz-feedback.show { opacity: 1; transform: scale(1); }
+  #quiz-feedback .feedback-big { font-size: 64px; }
+  #quiz-feedback .feedback-msg { font-size: 26px; font-weight: 700; color: var(--green); margin-top: 4px; }
+
+  /* ==============================
+     SECTION 5 – SUMMARY
+  ============================== */
+  #sec5 .summary-rule {
+    font-size: 46px; font-weight: 900;
+    text-align: center; line-height: 1.2;
+    color: var(--gold2);
+    text-shadow: 0 0 40px rgba(245,200,66,0.4);
+    max-width: 860px; margin-bottom: 20px;
+  }
+  .summary-cards {
+    display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 20px; width: 100%; max-width: 800px;
+  }
+  .sum-card {
+    flex: 1; min-width: 160px; max-width: 200px;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 18px 14px; text-align: center;
+    border: 2px solid rgba(255,255,255,0.12);
+    animation: float 3s ease-in-out infinite;
+  }
+  .sum-card:nth-child(2) { animation-delay: 0.5s; }
+  .sum-card:nth-child(3) { animation-delay: 1s; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .sum-card .sc-em { font-size: 54px; }
+  .sum-card .sc-name { font-size: 24px; font-weight: 900; margin-top: 6px; }
+
+  .sum-rule2 {
+    font-size: 26px; font-weight: 700; text-align: center;
+    color: rgba(255,255,255,0.7); max-width: 700px; line-height: 1.4;
+    margin-bottom: 22px;
+  }
+
+  #btn-restart {
+    font-size: 30px; font-weight: 900;
+    padding: 22px 70px; border-radius: 50px; border: none;
+    background: linear-gradient(135deg, #9b5de5, #6a00f4);
+    color: white; cursor: pointer;
+    box-shadow: 0 4px 30px rgba(155,93,229,0.5);
+    transition: transform 0.15s, box-shadow 0.15s;
+    letter-spacing: 0.5px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 80px;
+  }
+  #btn-restart:hover { transform: scale(1.04); box-shadow: 0 6px 40px rgba(155,93,229,0.7); }
+  #btn-restart:active { transform: scale(0.96); }
+
+  /* ===== UTILITY ===== */
+  .ding-anim {
+    animation: ding-scale 0.45s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes ding-scale { 0%{transform:scale(0.6)} 100%{transform:scale(1)} }
+
+  .confetti {
+    position: fixed; pointer-events: none; z-index: 999;
+    font-size: 28px; animation: fall 1.4s linear forwards;
+  }
+  @keyframes fall {
+    0%  { opacity:1; transform: translateY(-20px) rotate(0deg); }
+    100%{ opacity:0; transform: translateY(90vh) rotate(720deg); }
+  }
+
+  /* Scrollbar */
+  .section::-webkit-scrollbar { width: 5px; }
+  .section::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+
+  /* Touch drag ghost */
+  .touch-ghost {
+    position: fixed; pointer-events: none; z-index: 9999;
+    opacity: 0.85; transform: scale(1.18);
+    filter: drop-shadow(0 8px 24px rgba(0,229,255,0.5));
+    transition: none;
+  }
+
+  /* Active feedback for touch elements */
+  .mag-card:active,
+  .recipe-card:active { transform: scale(0.96); }
+
+  /* Larger scrollbar for touch */
+  .section::-webkit-scrollbar { width: 8px; }
+  .section::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+  /* Prevent text selection everywhere */
+  * { -webkit-user-select: none; user-select: none; }
+
+  /* Ensure items tray is scrollable on touch */
+  #sec3 .items-tray {
+    -webkit-overflow-scrolling: touch;
+  }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div id="topbar">
+    <div>
+      <div class="logo">🧲 The Magic Three</div>
+      <div class="subtitle">Grade 3 Science • Page 149</div>
+    </div>
+    <div id="timer-wrap">
+      <span class="timer-icon">⏱️</span>
+      <span id="timer">15:00</span>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div id="progress-wrap">
+    <div class="prog-step active" id="prog-0" onclick="gotoSection(0)" title="Section 1"></div>
+    <div class="prog-step"        id="prog-1" onclick="gotoSection(1)" title="Section 2"></div>
+    <div class="prog-step"        id="prog-2" onclick="gotoSection(2)" title="Section 3"></div>
+    <div class="prog-step"        id="prog-3" onclick="gotoSection(3)" title="Section 4"></div>
+    <div class="prog-step"        id="prog-4" onclick="gotoSection(4)" title="Section 5"></div>
+    <div class="prog-label" id="prog-label">1 / 5</div>
+  </div>
+
+  <!-- SECTIONS -->
+  <div id="section-wrap">
+
+    <!-- ===== SECTION 1 ===== -->
+    <div class="section active" id="sec1">
+      <div class="section-title">✨ The Magic Three ✨</div>
+      <div class="section-sub">👇 Tap each card to see if it is magnetic!</div>
+
+      <div class="cards-row">
+        <!-- IRON -->
+        <div class="mag-card" id="card-iron" onclick="tapCard('iron')">
+          <div class="card-emoji">⚙️</div>
+          <div class="card-name iron">IRON</div>
+          <div class="card-symbol">Fe</div>
+          <div class="card-tag" id="tag-iron">🧲 I am Magnetic!</div>
+          <div class="tap-hint">Tap me!</div>
+        </div>
+        <!-- NICKEL -->
+        <div class="mag-card" id="card-nickel" onclick="tapCard('nickel')">
+          <div class="card-emoji">🪙</div>
+          <div class="card-name nickel">NICKEL</div>
+          <div class="card-symbol">Ni</div>
+          <div class="card-tag" id="tag-nickel">🧲 I am Magnetic!</div>
+          <div class="tap-hint">Tap me!</div>
+        </div>
+        <!-- COBALT -->
+        <div class="mag-card" id="card-cobalt" onclick="tapCard('cobalt')">
+          <div class="card-emoji">🔋</div>
+          <div class="card-name cobalt">COBALT</div>
+          <div class="card-symbol">Co</div>
+          <div class="card-tag" id="tag-cobalt">🧲 I am Magnetic!</div>
+          <div class="tap-hint">Tap me!</div>
+        </div>
+      </div>
+
+      <div class="fact-box" style="margin-top:16px;">
+        💡 Only these 3 are <strong>pure magnetic materials</strong>.<br>
+        If a metal has these <strong>inside</strong>, it is <span style="color:var(--green)">MAGNETIC</span>!
+      </div>
+    </div>
+
+    <!-- ===== SECTION 2 ===== -->
+    <div class="section" id="sec2">
+      <div class="section-title">🔬 The Secret Ingredient Lab</div>
+      <div class="section-sub">👇 Tap each recipe. Does it have Iron, Nickel, or Cobalt?</div>
+      <div class="tap-all-hint">Hint: Look for the <span style="color:var(--gold2);font-weight:900;">magic ingredients</span> ✨</div>
+
+      <div class="recipes-row">
+
+        <!-- STEEL -->
+        <div class="recipe-card" onclick="checkRecipe(this,'A',true)">
+          <div class="recipe-label">Recipe A</div>
+          <div class="recipe-name">🔩 STEEL</div>
+          <div class="recipe-formula">
+            <span class="ingredient-tag magic">Iron ⚙️</span> +
+            <span class="ingredient-tag">Carbon</span>
+          </div>
+          <div class="recipe-result magnetic" id="res-A">✅ MAGNETIC</div>
+        </div>
+
+        <!-- BRASS -->
+        <div class="recipe-card" onclick="checkRecipe(this,'B',false)">
+          <div class="recipe-label">Recipe B</div>
+          <div class="recipe-name">🪗 BRASS</div>
+          <div class="recipe-formula">
+            <span class="ingredient-tag">Copper</span> +
+            <span class="ingredient-tag">Zinc</span>
+          </div>
+          <div class="recipe-result non-magnetic" id="res-B">❌ NON-MAGNETIC</div>
+        </div>
+
+        <!-- STAINLESS STEEL -->
+        <div class="recipe-card" onclick="checkRecipe(this,'C',true)">
+          <div class="recipe-label">Recipe C</div>
+          <div class="recipe-name">🍴 STAINLESS STEEL</div>
+          <div class="recipe-formula">
+            <span class="ingredient-tag magic">Iron ⚙️</span> +<br>
+            Chromium +<br>
+            <span class="ingredient-tag magic">Nickel 🪙</span>
+          </div>
+          <div class="recipe-result magnetic" id="res-C">✅ MAGNETIC</div>
+        </div>
+
+      </div>
+
+      <div class="fact-box" style="margin-top:16px;">
+        🔑 The <span style="color:var(--gold2)"><strong>Secret Ingredient</strong></span> = Iron, Nickel, or Cobalt.<br>
+        No secret ingredient → <span style="color:var(--red)"><strong>NOT magnetic!</strong></span>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 3 ===== -->
+    <div class="section" id="sec3">
+      <div class="section-title">🎯 Sorting Challenge!</div>
+      <div class="section-sub">Drag each item into the correct bin!</div>
+
+      <div class="drag-area">
+        <!-- Items tray -->
+        <div class="items-tray" id="tray">
+          <div class="drag-item" id="di-gold"   data-magnetic="false" draggable="true">💍<div class="di-label">Gold Ring</div></div>
+          <div class="drag-item" id="di-nail"   data-magnetic="true"  draggable="true">🔩<div class="di-label">Steel Nail</div></div>
+          <div class="drag-item" id="di-alum"   data-magnetic="false" draggable="true">🥫<div class="di-label">Aluminium Can</div></div>
+          <div class="drag-item" id="di-nicoin" data-magnetic="true"  draggable="true">🪙<div class="di-label">Nickel Coin</div></div>
+          <div class="drag-item" id="di-copper" data-magnetic="false" draggable="true">🪢<div class="di-label">Copper Wire</div></div>
+          <div class="drag-item" id="di-clip"   data-magnetic="true"  draggable="true">📎<div class="di-label">Iron Paperclip</div></div>
+        </div>
+
+        <!-- Bins -->
+        <div class="bins-row">
+          <div class="drop-bin mag-bin" id="bin-mag"
+               ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropItem(event,'mag')">
+            <div class="bin-icon">🧲</div>
+            <div class="bin-title">MAGNETIC</div>
+            <div class="bin-items" id="bin-mag-items"></div>
+          </div>
+          <div class="drop-bin non-bin" id="bin-non"
+               ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropItem(event,'non')">
+            <div class="bin-icon">🚫</div>
+            <div class="bin-title">NON-MAGNETIC</div>
+            <div class="bin-items" id="bin-non-items"></div>
+          </div>
+        </div>
+
+        <div class="score-bar" id="score-bar">⭐ Score: 0 / 6 &nbsp;|&nbsp; Keep going!</div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 4 ===== -->
+    <div class="section" id="sec4">
+      <div class="section-title">🤔 The "Why?" Quiz</div>
+
+      <div class="quiz-q">🔩 Why is a Steel Nail magnetic?</div>
+
+      <div class="quiz-options">
+        <div class="quiz-opt" id="opt-A" onclick="answerQuiz('A')">
+          <span class="opt-letter">A</span>
+          ✨ Because it is shiny
+        </div>
+        <div class="quiz-opt" id="opt-B" onclick="answerQuiz('B')">
+          <span class="opt-letter">B</span>
+          ⚙️ Because it has <strong>Iron</strong> inside
+        </div>
+      </div>
+
+      <div id="quiz-feedback">
+        <div class="feedback-big">🎉</div>
+        <div class="feedback-msg">YES! Iron makes it magnetic! 🧲</div>
+        <div style="font-size:22px;color:rgba(255,255,255,0.6);margin-top:6px;">The magnet pulls the nail because Iron is inside!</div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 5 ===== -->
+    <div class="section" id="sec5">
+      <div class="section-title">🏆 Great Work, Scientists!</div>
+
+      <div class="summary-cards">
+        <div class="sum-card">
+          <div class="sc-em">⚙️</div>
+          <div class="sc-name" style="color:#ff8c42">IRON</div>
+          <div style="font-size:15px;color:rgba(255,255,255,0.6);margin-top:4px;">Fe</div>
+        </div>
+        <div class="sum-card">
+          <div class="sc-em">🪙</div>
+          <div class="sc-name" style="color:#64dfdf">NICKEL</div>
+          <div style="font-size:15px;color:rgba(255,255,255,0.6);margin-top:4px;">Ni</div>
+        </div>
+        <div class="sum-card">
+          <div class="sc-em">💎</div>
+          <div class="sc-name" style="color:#c9aaff">COBALT</div>
+          <div style="font-size:15px;color:rgba(255,255,255,0.6);margin-top:4px;">Co</div>
+        </div>
+      </div>
+
+      <div class="summary-rule">
+        🚫 No Iron, Nickel, or Cobalt?<br>
+        <span style="color:var(--red)">No Magnetism!</span>
+      </div>
+
+      <div class="sum-rule2">
+        ✅ If a metal <strong>has</strong> Iron, Nickel, or Cobalt inside → <span style="color:var(--green)">MAGNETIC</span><br>
+        ❌ If a metal <strong>does NOT have</strong> them → <span style="color:var(--red)">NON-MAGNETIC</span>
+      </div>
+
+      <button id="btn-restart" onclick="restartLesson()">🔄 RESTART LESSON</button>
+    </div>
+
+  </div><!-- /section-wrap -->
+
+  <!-- NAVIGATION -->
+  <div id="nav">
+    <button class="nav-btn" id="btn-prev" onclick="prevSection()" disabled>◀ BACK</button>
+    <button class="nav-btn" id="btn-next" onclick="nextSection()">NEXT ▶</button>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+// =================== ANDROID SMARTBOARD OPTIMIZATIONS ===================
+// Prevent long-press context menu on drag items (Android Chrome)
+document.addEventListener('contextmenu', e => {
+  if (e.target.closest('.drag-item') || e.target.closest('.mag-card') || e.target.closest('.recipe-card')) {
+    e.preventDefault();
+  }
+});
+
+// Prevent default touch behaviors that interfere with drag
+document.querySelectorAll('.drag-item').forEach(el => {
+  el.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+});
+
+// Kill double-tap zoom on nav buttons and interactive elements
+document.querySelectorAll('.nav-btn, .mag-card, .recipe-card, .quiz-opt, #btn-restart, .prog-step').forEach(el => {
+  let lastTap = 0;
+  el.addEventListener('touchend', e => {
+    const now = Date.now();
+    if (now - lastTap < 300) e.preventDefault();
+    lastTap = now;
+  }, { passive: false });
+});
+
+// =================== STATE ===================
+let currentSection = 0;
+const TOTAL = 5;
+let timerSeconds = 15 * 60;
+let timerInterval = null;
+let draggedItem = null;
+let score = 0;
+let quizAnswered = false;
+
+// =================== TIMER ===================
+function startTimer() {
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    if (timerSeconds < 0) timerSeconds = 0;
+    const m = Math.floor(timerSeconds / 60).toString().padStart(2,'0');
+    const s = (timerSeconds % 60).toString().padStart(2,'0');
+    document.getElementById('timer').textContent = `${m}:${s}`;
+    if (timerSeconds === 0) clearInterval(timerInterval);
+  }, 1000);
+}
+
+// =================== NAVIGATION ===================
+function gotoSection(idx) {
+  if (idx < 0 || idx >= TOTAL) return;
+  const sections = document.querySelectorAll('.section');
+  sections.forEach(s => { s.classList.remove('active'); });
+  sections[idx].classList.add('active');
+  currentSection = idx;
+  updateProgress();
+  updateNavBtns();
+  if (idx === 4) triggerConfetti();
+}
+
+function nextSection() { gotoSection(currentSection + 1); }
+function prevSection() { gotoSection(currentSection - 1); }
+
+function updateProgress() {
+  for (let i = 0; i < TOTAL; i++) {
+    const el = document.getElementById('prog-' + i);
+    el.classList.remove('active','done');
+    if (i < currentSection)      el.classList.add('done');
+    else if (i === currentSection) el.classList.add('active');
+  }
+  document.getElementById('prog-label').textContent = `${currentSection + 1} / ${TOTAL}`;
+}
+
+function updateNavBtns() {
+  document.getElementById('btn-prev').disabled = currentSection === 0;
+  document.getElementById('btn-next').textContent = currentSection === TOTAL - 1 ? '🏁 FINISH' : 'NEXT ▶';
+}
+
+// =================== SECTION 1 – CARDS ===================
+function tapCard(name) {
+  const card = document.getElementById('card-' + name);
+  const tag  = document.getElementById('tag-' + name);
+  // Remove previous glow classes
+  card.classList.remove('glow-iron','glow-nickel','glow-cobalt','tapped');
+  void card.offsetWidth; // reflow for re-trigger
+  card.classList.add('glow-' + name, 'tapped');
+  playTone(440 + (name === 'iron' ? 0 : name === 'nickel' ? 100 : 200), 0.15);
+}
+
+// =================== SECTION 2 – RECIPES ===================
+const shownRecipes = {};
+function checkRecipe(card, label, isMagnetic) {
+  if (shownRecipes[label]) return;
+  shownRecipes[label] = true;
+  const res = document.getElementById('res-' + label);
+  res.classList.add('show');
+  res.classList.add('ding-anim');
+  playTone(isMagnetic ? 660 : 220, 0.2);
+}
+
+// =================== SECTION 3 – DRAG & DROP ===================
+
+// --- Desktop drag ---
+document.addEventListener('dragstart', e => {
+  if (!e.target.classList.contains('drag-item')) return;
+  draggedItem = e.target;
+  setTimeout(() => { if(draggedItem) draggedItem.classList.add('dragging'); }, 0);
+});
+
+document.addEventListener('dragend', e => {
+  if (draggedItem) { draggedItem.classList.remove('dragging'); }
+});
+
+function dragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('drag-over');
+}
+function dragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+
+function dropItem(e, binType) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (!draggedItem) return;
+  processDroppedItem(draggedItem, binType);
+  draggedItem = null;
+}
+
+function processDroppedItem(item, binType) {
+  const isMagnetic = item.dataset.magnetic === 'true';
+  const correct = (binType === 'mag' && isMagnetic) || (binType === 'non' && !isMagnetic);
+
+  if (correct) {
+    item.classList.remove('dragging');
+    item.classList.add('correct-placed', 'ding-anim');
+    item.draggable = false;
+    const binItemsId = binType === 'mag' ? 'bin-mag-items' : 'bin-non-items';
+    document.getElementById(binItemsId).appendChild(item);
+    score++;
+    playTone(880, 0.1);
+    updateScore();
+    spawnConfettiAt(item);
+  } else {
+    item.classList.remove('dragging');
+    item.classList.add('bounce');
+    playTone(180, 0.15, 'sawtooth');
+    setTimeout(() => item.classList.remove('bounce'), 550);
+  }
+}
+
+function updateScore() {
+  const msgs = ['', '', 'Great start! 🌟', 'Halfway there! 💪', 'Almost done! 🔥', 'Amazing! 🎉', 'PERFECT! 🏆 All correct!'];
+  document.getElementById('score-bar').textContent = `⭐ Score: ${score} / 6  |  ${msgs[score] || 'Keep going!'}`;
+}
+
+// ---- Touch drag for mobile/smartboard ----
+let touchGhost = null;
+let touchSource = null;
+
+document.addEventListener('touchstart', e => {
+  const t = e.target.closest('.drag-item');
+  if (!t || t.classList.contains('correct-placed')) return;
+  touchSource = t;
+  draggedItem  = t;
+
+  touchGhost = t.cloneNode(true);
+  touchGhost.classList.add('touch-ghost');
+  touchGhost.style.width  = t.offsetWidth  + 'px';
+  touchGhost.style.height = t.offsetHeight + 'px';
+  document.body.appendChild(touchGhost);
+  moveTouchGhost(e.touches[0]);
+}, { passive: true });
+
+document.addEventListener('touchmove', e => {
+  if (!touchGhost) return;
+  e.preventDefault();
+  moveTouchGhost(e.touches[0]);
+  // Highlight bin under finger
+  document.querySelectorAll('.drop-bin').forEach(b => b.classList.remove('drag-over'));
+  const el = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+  const bin = el && el.closest('.drop-bin');
+  if (bin) bin.classList.add('drag-over');
+}, { passive: false });
+
+document.addEventListener('touchend', e => {
+  if (!touchGhost || !touchSource) return;
+  const touch = e.changedTouches[0];
+  const el = document.elementFromPoint(touch.clientX, touch.clientY);
+  const bin = el && el.closest('.drop-bin');
+
+  document.querySelectorAll('.drop-bin').forEach(b => b.classList.remove('drag-over'));
+  touchGhost.remove(); touchGhost = null;
+
+  if (bin) {
+    const binType = bin.classList.contains('mag-bin') ? 'mag' : 'non';
+    processDroppedItem(touchSource, binType);
+  }
+  draggedItem  = null;
+  touchSource = null;
+});
+
+function moveTouchGhost(touch) {
+  if (!touchGhost) return;
+  touchGhost.style.left = (touch.clientX - touchGhost.offsetWidth / 2)  + 'px';
+  touchGhost.style.top  = (touch.clientY - touchGhost.offsetHeight / 2) + 'px';
+}
+
+// =================== SECTION 4 – QUIZ ===================
+function answerQuiz(opt) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const optA = document.getElementById('opt-A');
+  const optB = document.getElementById('opt-B');
+  const fb   = document.getElementById('quiz-feedback');
+
+  if (opt === 'B') {
+    optB.classList.add('correct');
+    optA.classList.add('wrong');
+    fb.classList.add('show');
+    playTone(880, 0.08);
+    setTimeout(() => playTone(1100, 0.08), 180);
+    setTimeout(() => playTone(1320, 0.1), 350);
+    triggerConfetti();
+  } else {
+    optA.classList.add('wrong');
+    optB.style.opacity = '0.4';
+    playTone(200, 0.2, 'sawtooth');
+    // Allow retry
+    setTimeout(() => {
+      quizAnswered = false;
+      optA.classList.remove('wrong');
+      optA.style.opacity = '';
+      optB.style.opacity = '';
+    }, 1200);
+  }
+}
+
+// =================== SECTION 5 – RESTART ===================
+function restartLesson() {
+  // Reset section 1
+  ['iron','nickel','cobalt'].forEach(n => {
+    const c = document.getElementById('card-' + n);
+    c.classList.remove('glow-iron','glow-nickel','glow-cobalt','tapped');
+  });
+
+  // Reset section 2
+  Object.keys(shownRecipes).forEach(k => delete shownRecipes[k]);
+  ['A','B','C'].forEach(l => {
+    const r = document.getElementById('res-' + l);
+    r.classList.remove('show','ding-anim');
+  });
+
+  // Reset section 3
+  const tray = document.getElementById('tray');
+  ['bin-mag-items','bin-non-items'].forEach(id => {
+    const c = document.getElementById(id);
+    [...c.querySelectorAll('.drag-item')].forEach(el => {
+      el.classList.remove('correct-placed','ding-anim','bounce');
+      el.draggable = true;
+      tray.appendChild(el);
+    });
+  });
+  score = 0;
+  updateScore();
+
+  // Reset quiz
+  quizAnswered = false;
+  ['opt-A','opt-B'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('correct','wrong');
+    el.style.opacity = '';
+  });
+  document.getElementById('quiz-feedback').classList.remove('show');
+
+  // Reset timer
+  clearInterval(timerInterval);
+  timerSeconds = 15 * 60;
+  document.getElementById('timer').textContent = '15:00';
+  startTimer();
+
+  gotoSection(0);
+}
+
+// =================== AUDIO ===================
+let audioCtx = null;
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playTone(freq, duration, type = 'sine') {
+  try {
+    const ctx = getAudio();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(0.22, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + duration);
+  } catch(e) {}
+}
+
+// =================== CONFETTI ===================
+function spawnConfettiAt(el) {
+  const emojis = ['🌟','✨','🎉','⭐','💫'];
+  const rect = el.getBoundingClientRect();
+  for (let i = 0; i < 5; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    c.style.left = (rect.left + rect.width/2 + (Math.random()-0.5)*60) + 'px';
+    c.style.top  = rect.top + 'px';
+    c.style.animationDelay = (Math.random() * 0.3) + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 1700);
+  }
+}
+function triggerConfetti() {
+  const emojis = ['🌟','✨','🎉','💫','🏆','⭐'];
+  for (let i = 0; i < 18; i++) {
+    setTimeout(() => {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.top  = '-30px';
+      c.style.fontSize = (22 + Math.random() * 20) + 'px';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 1600);
+    }, i * 80);
+  }
+}
+
+// =================== INIT ===================
+startTimer();
+updateNavBtns();
+</script>
+</body>
+</html>
